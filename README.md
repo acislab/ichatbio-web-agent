@@ -1,6 +1,6 @@
-# ichatbio-agent-example
+# ichatbio-web-agent
 
-A template for making new iChatBio agents.
+Performs internet searches using Gemini.
 
 ## Quickstart
 

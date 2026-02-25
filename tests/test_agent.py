@@ -1,25 +1,22 @@
 import pytest
-from ichatbio.agent_response import DirectResponse, ProcessBeginResponse, ProcessLogResponse, ArtifactResponse, \
-    ResponseMessage
+from ichatbio.agent_response import ProcessLogResponse
 
-from src.agent import HelloWorldAgent
+import pytest_asyncio
+
+from agent import WebSearchAgent
+
+
+@pytest_asyncio.fixture()
+def agent():
+    return WebSearchAgent()
 
 
 @pytest.mark.asyncio
-async def test_hello_world(context, messages):
-    # The test `context` populates the `messages` list with the agent's responses
-    await HelloWorldAgent().run(context, "Hi", "hello", None)
+async def test_web_search(agent, context, messages):
+    await agent.run(context, "What's iChatbio?", "web_search", None)
 
-    # Message objects are restricted to the following types:
-    messages: list[ResponseMessage]
+    process_messages = [m for m in messages if isinstance(m, ProcessLogResponse)]
+    assert process_messages[0].text == "Searching the Internet"
+    assert "sources" in process_messages[1].data
+    assert len(process_messages[1].data["sources"]) > 0
 
-    # We can test all the agent's responses at once
-    assert messages == [
-        ProcessBeginResponse("Thinking"),
-        ProcessLogResponse("Hello world!"),
-        ArtifactResponse(mimetype="text/html",
-                         description="The Wikipedia page for \"Hello World\"",
-                         uris=["https://en.wikipedia.org/wiki/Hello_World"],
-                         metadata={'source': 'Wikipedia'}),
-        DirectResponse("I said it!")
-    ]
