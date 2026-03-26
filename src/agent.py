@@ -17,7 +17,8 @@ class WebSearchAgent(IChatBioAgent):
         return AgentCard(
             name="Web Search",
             description="Searches the internet.",
-            icon=None,
+            documentation_url="https://github.com/acislab/ichatbio-web-agent",
+            icon="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw",
             entrypoints=[
                 web_search.entrypoint,
             ]
